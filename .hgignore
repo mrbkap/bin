@@ -1,2 +1,6 @@
 ^git
 ^mtn
+^hg$
+^hgk$
+^hgk-1$
+^hgmerge$
