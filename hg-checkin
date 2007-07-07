@@ -1,0 +1,94 @@
+#!/usr/bin/python
+import sys, os, getopt
+
+def get_change_info(revname):
+    '''Returns a 3-tuple of files changed, files added, files deleted for a
+    given revision'''
+    command = "hg export %s | lsdiff --strip=1 -s" % revname
+
+    changes = []
+    additions = []
+    deletions = []
+    for file in os.popen(command).readlines():
+        (changetype, fname) = file.split()
+        if changetype is "!":
+            changes.append(fname)
+        elif changetype is "+":
+            additions.append(fname)
+        elif changetype is "-":
+            deletions.append(fname)
+        else:
+            print "Don't know what to do with %s" % file
+    return (changes, additions, deletions)
+
+# XXX This doesn't work -- cvs is too chatty
+def check_up_to_date(files):
+    '''Ensures that files (which are already tracked in CVS and aren't being
+    deleted) are truly up to date.'''
+    outdated = []
+    for line in os.popen("cvs -n update %s" % ' '.join(files)).readlines():
+        (status, fname) = line.split()
+        if status is not 'M':
+            outdated.append((status, fname))
+
+# First, parse the arguments.
+revname = None
+message = None
+
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "m:", ["message="])
+    if len(args) > 1:
+        raise getopt.GetoptError, "only pass 1 revision"
+except getopt.GetoptError, e:
+    print "Error: %s" % str(e)
+    print "Usage: hg-checkin [-m message] [revision]"
+    sys.exit(2)
+
+for opt, arg in opts:
+    if opt in ('-m', '--message'):
+        message = arg
+    else:
+        print "unknown argument %s" % opt
+        sys.exit(2)
+
+if len(args) is 1:
+    revname = args[0]
+else:
+    revname = "tip"
+
+# Gather information about the given revision.
+(changes, additions, deletions) = get_change_info(revname)
+
+def check_outdated(outdated):
+    if outdated is not None:
+        print "Error:\n%s" '\n'.join(["%s had status %s" % (i[1], i[0]) for i in outdated])
+        raise "Outdated files found"
+
+print "Changes:\n%s" % '\n'.join(changes)
+print "\nAdditions:\n%s" % '\n'.join(additions)
+print "\nDeletions:\n%s" % '\n'.join(deletions)
+
+#check_outdated(check_up_to_date(changes))
+
+additionsStr = ' '.join(additions)
+deletionsStr = ' '.join(deletions)
+
+if len(additions) > 0:
+    if os.system("cvs add %s" % additionsStr) is not 0:
+        print "adding failed"
+        sys.exit(1)
+if len(deletions) > 0:
+    if os.system("cvs rm %s" % deletionsStr) is not 0:
+        print "deleting failed"
+        sys.exit(1)
+
+if message is None:
+    if os.system("cvs commit %s %s %s" % (' '.join(changes), additionsStr,
+        deletionsStr)) is not 0:
+        print "committing failed"
+        sys.exit(1)
+else:
+    if os.system("cvs commit -m'%s' %s %s %s" % (message, ' '.join(changes),
+        additionsStr, deletionsStr)) is not 0:
+        print "committing failed"
+        sys.exit(1)
