@@ -21,15 +21,26 @@ def get_change_info(revname):
             print "Don't know what to do with %s" % file
     return (changes, additions, deletions)
 
-# XXX This doesn't work -- cvs is too chatty
-def check_up_to_date(files):
+def check_up_to_date(files, expected):
     '''Ensures that files (which are already tracked in CVS and aren't being
     deleted) are truly up to date.'''
     outdated = []
-    for line in os.popen("cvs -n update %s" % ' '.join(files)).readlines():
-        (status, fname) = line.split()
-        if status is not 'M':
-            outdated.append((status, fname))
+    if len(files) is 0:
+        return outdated
+
+    for line in os.popen("cvs -n -q update %s 2>/dev/null" % \
+            ' '.join(files)).readlines():
+        # CVS is chatty (evin with the -q flag), so ignore lines like:
+        # cvs update: conflicts found in bar
+        if line[:2] not in ("U ", "M ", "C ", "A ", "R "):
+            continue
+        (status, fname) = line.split(' ', 1)
+
+        # Make sure to ignore unknown files as well.
+        if status is not expected:
+            print "(%s) %s %s" % (expected, status, fname.strip())
+            outdated.append((status, fname.strip()))
+    return outdated
 
 # First, parse the arguments.
 revname = None
@@ -60,15 +71,19 @@ else:
 (changes, additions, deletions) = get_change_info(revname)
 
 def check_outdated(outdated):
-    if outdated is not None:
-        print "Error:\n%s" '\n'.join(["%s had status %s" % (i[1], i[0]) for i in outdated])
+    trans = { "C" : "conflicted" }
+    if len(outdated) > 0:
+        print "Error:\n%s" '\n'.join(["%s was %s" % \
+                (i[1], trans[i[0]]) for i in outdated])
         raise "Outdated files found"
 
 print "Changes:\n%s" % '\n'.join(changes)
 print "\nAdditions:\n%s" % '\n'.join(additions)
 print "\nDeletions:\n%s" % '\n'.join(deletions)
 
-#check_outdated(check_up_to_date(changes))
+check_outdated(check_up_to_date(changes, 'M'))
+check_outdated(check_up_to_date(additions, '?'))
+check_outdated(check_up_to_date(deletions, 'R'))
 
 additionsStr = ' '.join(additions)
 deletionsStr = ' '.join(deletions)
