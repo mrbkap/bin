@@ -6,6 +6,9 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# Get rid of CVS turds first!
+tree_cleanup
+
 hg addremove
 if [ $? -ne 0 ]; then
     echo "addremove failed"
@@ -18,9 +21,11 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-hg tag cvs-head
+hg tag -f cvs-head
 if [ $? -ne 0 ]; then
     echo "tagging failed"
     exit 1
 fi
+
+echo "successfully committed revision" `hg id -i`
 

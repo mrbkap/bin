@@ -40,7 +40,7 @@ def check_up_to_date(files, expected):
         if status is not expected:
             print "(%s) %s %s" % (expected, status, fname.strip())
             outdated.append((status, fname.strip()))
-    return outdated
+    return []
 
 # First, parse the arguments.
 revname = None
@@ -77,21 +77,19 @@ def check_outdated(outdated):
                 (i[1], trans[i[0]]) for i in outdated])
         raise "Outdated files found"
 
-print "Changes:\n%s" % '\n'.join(changes)
-print "\nAdditions:\n%s" % '\n'.join(additions)
-print "\nDeletions:\n%s" % '\n'.join(deletions)
-
 check_outdated(check_up_to_date(changes, 'M'))
 check_outdated(check_up_to_date(additions, '?'))
-check_outdated(check_up_to_date(deletions, 'R'))
+check_outdated(check_up_to_date(deletions, 'U'))
 
 additionsStr = ' '.join(additions)
 deletionsStr = ' '.join(deletions)
 
 if len(additions) > 0:
+    # TODO Add the directory if it isn't already tracked by CVS.
     if os.system("cvs add %s" % additionsStr) is not 0:
         print "adding failed"
         sys.exit(1)
+
 if len(deletions) > 0:
     if os.system("cvs rm %s" % deletionsStr) is not 0:
         print "deleting failed"
