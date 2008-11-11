@@ -1,0 +1,24 @@
+#!/usr/bin/python
+
+import sys
+import os
+
+cur = 1
+configure = False
+path = "dbg-obj"
+
+if len(sys.argv) > 1 and sys.argv[cur][0] == "-":
+    if sys.argv[cur][1:] == "conf":
+        configure = True
+        cur = cur + 1
+if len(sys.argv) > cur:
+    if sys.argv[cur] == "opt":
+        path = "opt-obj"
+        cur = cur + 1
+    elif sys.argv[cur] == "dbg":
+        cur = cur + 1
+
+if configure:
+    os.system("cd %s; ./configure && make -j4 %s" % (path, ' '.join(sys.argv[cur:])))
+else:
+    os.system("make -j4 -C %s %s" % (path, ' '.join(sys.argv[cur:])))
