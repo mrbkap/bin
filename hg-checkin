@@ -4,22 +4,14 @@ import sys, os, getopt
 def get_change_info(revname):
     '''Returns a 3-tuple of files changed, files added, files deleted for a
     given revision'''
-    command = "hg export %s | lsdiff --strip=1 -s" % revname
+    command = "hg log -r '%s' --template='{file_adds}\n{file_dels}\n{file_mods}\n'" % revname
 
-    changes = []
-    additions = []
-    deletions = []
-    for file in os.popen(command).readlines():
-        (changetype, fname) = file.split()
-        if changetype is "!":
-            changes.append(fname)
-        elif changetype is "+":
-            additions.append(fname)
-        elif changetype is "-":
-            deletions.append(fname)
-        else:
-            print "Don't know what to do with %s" % file
-    return (changes, additions, deletions)
+    output = os.popen(command);
+
+    additions = output.readline().split();
+    deletions = output.readline().split();
+    changes = output.readline().split();
+    return (additions, deletions, changes)
 
 def check_up_to_date(files, expected):
     '''Ensures that files (which are already tracked in CVS and aren't being
@@ -68,7 +60,7 @@ else:
     revname = "tip"
 
 # Gather information about the given revision.
-(changes, additions, deletions) = get_change_info(revname)
+(additions, deletions, changes) = get_change_info(revname)
 
 def check_outdated(outdated):
     trans = { "C" : "conflicted" }
@@ -84,6 +76,7 @@ check_outdated(check_up_to_date(deletions, 'U'))
 additionsStr = ' '.join(additions)
 deletionsStr = ' '.join(deletions)
 
+# TODO Rollback!
 if len(additions) > 0:
     # TODO Add the directory if it isn't already tracked by CVS.
     if os.system("cvs add %s" % additionsStr) is not 0:
