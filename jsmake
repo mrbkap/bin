@@ -19,6 +19,6 @@ if len(sys.argv) > cur:
         cur = cur + 1
 
 if configure:
-    os.system("cd %s; ./configure && make -j4 %s" % (path, ' '.join(sys.argv[cur:])))
+    os.system("cd %s; ./configure && make -s -j4 %s" % (path, ' '.join(sys.argv[cur:])))
 else:
-    os.system("make -j4 -C %s %s" % (path, ' '.join(sys.argv[cur:])))
+    os.system("make -s -j4 -C %s %s" % (path, ' '.join(sys.argv[cur:])))
