@@ -5,6 +5,7 @@ find . \( -name .git -or -name .hg -or -name testing \) -prune -or \
           -name '#*#' -or \
           -name '*~'  -or \
           -name 'core.[0-9]*' -or \
+          -name 'core' -or \
           -name '*.orig' -or \
           -name '*.rej' \
        \) -print -exec rm '{}' \;
