@@ -8,4 +8,4 @@ find . \( -name .git -or -name .hg -or -name testing \) -prune -or \
           -name 'core' -or \
           -name '*.orig' -or \
           -name '*.rej' \
-       \) -print -exec rm '{}' \;
+       \) -and -type f -print -exec rm '{}' \;
