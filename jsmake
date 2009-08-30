@@ -41,6 +41,5 @@ if os.path.isfile('configure'):
             configure = False
 
 if configure:
-    os.system("cd %s; ./configure && make %s %s" % (path, makeflags, ' '.join(sys.argv[cur:])))
-else:
-    os.system("make %s -C %s %s" % (makeflags, path, ' '.join(sys.argv[cur:])))
+    os.system("cd %s && ./configure" % path)
+os.system("make %s -C %s %s 2>&1 | sed -e 's|^\\(\\.\\./\\)*||'" % (makeflags, path, ' '.join(sys.argv[cur:])))
