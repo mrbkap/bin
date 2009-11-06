@@ -2,7 +2,7 @@
 import sys, os, getopt, subprocess
 
 # First, parse the arguments.
-test_path = '../tests/'
+test_path = './tests/'
 test = None
 shell = None
 print_command = False
