@@ -44,7 +44,11 @@ shell = os.path.abspath(shell)
 if not os.path.isfile:
     raise TypeError("Error: shell %s does not exist %s" % shell)
 
-full_test_path = os.path.abspath(os.path.join(test_path, test))
+if not os.path.isfile(test):
+    full_test_path = os.path.abspath(os.path.join(test_path, test))
+else:
+    full_test_path = os.path.abspath(test)
+
 if not os.path.isfile(full_test_path):
     raise TypeError("Error: full_test_path %s is not a file" % full_test_path)
 
