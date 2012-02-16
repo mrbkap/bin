@@ -6,3 +6,5 @@
 ^hgmerge$
 ^bzr$
 ^xdot.py$
+^adb$
+^js$
