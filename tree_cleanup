@@ -1,6 +1,6 @@
 #!/bin/sh
 
-find . \( -name .git -or -name .hg -or -name testing \) -prune -or \
+find . \( -name .git -or -name .hg -or -name testing -or -name extensions \) -prune -or \
        \( -name '.#*' -or \
           -name '#*#' -or \
           -name '*~'  -or \
