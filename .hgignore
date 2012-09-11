@@ -6,3 +6,10 @@
 ^hgmerge$
 ^bzr$
 ^xdot.py$
+^mvim$
+^js$
+^firefox$
+^cargo$
+^rust$
+^rustc$
+^rustdoc$

@@ -14,8 +14,11 @@ else:
         toplevel = dirname
         dirname, _ = os.path.split(toplevel)
 
-layout = ('content', 'dom', 'layout', 'editor', 'caps', 'media')
+layout = ('content', 'dom', 'layout', 'editor', 'caps', 'media', 'ipc')
 libxul = ('js', 'embedding', 'storage')
+
+if "MAKEFLAGS" not in os.environ:
+    os.environ["MAKEFLAGS"] = "-s -j8"
 
 if toplevel in layout or \
         (toplevel == 'js' and sys.argv[1].find('xpconnect') >= 0):
