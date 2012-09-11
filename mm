@@ -6,7 +6,7 @@ import os
 path = sys.argv[1]
 toplevel = path[:sys.argv[1].find('/')]
 
-layout = ('content', 'dom', 'layout', 'editor', 'caps', 'media')
+layout = ('content', 'dom', 'layout', 'editor', 'caps', 'media', 'ipc')
 
 if "MAKEFLAGS" not in os.environ:
     os.environ["MAKEFLAGS"] = "-s -j8"
