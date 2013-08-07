@@ -1,0 +1,3 @@
+#!/bin/sh
+
+vncserver :1 -name mrbkap -geometry 1024x768 -dpi 94 -log '*:stderr:100'

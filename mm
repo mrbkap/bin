@@ -22,8 +22,8 @@ if "MAKEFLAGS" not in os.environ:
 
 if toplevel in layout or \
         (toplevel == 'js' and sys.argv[1].find('xpconnect') >= 0):
-    os.system('make -C %s && make -C layout/build && make -C toolkit/library' % path)
+    os.system('make -C %s && make -C layout/build && make -C toolkit/library libs' % path)
 elif toplevel in libxul:
-    os.system('make -C %s && make -C toolkit/library' % path)
+    os.system('make -C %s && make -C toolkit/library libs' % path)
 else:
     os.system('make -C %s' % path);

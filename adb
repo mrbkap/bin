@@ -24,6 +24,10 @@ do
 done
 
 if [ $CURRENT == '/' ]; then
+    CURRENT='/build/2B2G-otoro/out/host/linux-x86/bin/adb'
+fi
+
+if [ ! -x $CURRENT ]; then
     echo "Unable to find adb."
     exit 1
 fi
