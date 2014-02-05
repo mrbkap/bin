@@ -22,7 +22,7 @@ def check_up_to_date(files, expected):
 
     for line in os.popen("cvs -n -q update %s 2>/dev/null" % \
             ' '.join(files)).readlines():
-        # CVS is chatty (evin with the -q flag), so ignore lines like:
+        # CVS is chatty (even with the -q flag), so ignore lines like:
         # cvs update: conflicts found in bar
         if line[:2] not in ("U ", "M ", "C ", "A ", "R "):
             continue
