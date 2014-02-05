@@ -1,3 +1,8 @@
 #!/bin/sh
 
+if [ ! -x ./mach ]; then
+    echo "Error: no (executable) 'mach' in current directory" >&2
+    exit 1
+fi
+
 python2 ./mach $@
