@@ -1,8 +1,13 @@
 #!/bin/sh
 
-if [ ! -x ./mach ]; then
+MACH=''
+if [ -x ./mach ]; then
+    MACH='./mach'
+elif [ -x ../mozilla/mach ]; then
+    MACH='../mozilla/mach'
+else
     echo "Error: no (executable) 'mach' in current directory" >&2
     exit 1
 fi
 
-python2 ./mach $@
+python2 $MACH $@
