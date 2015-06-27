@@ -1,3 +1,0 @@
-#!/bin/bash
-
-( cd `hg root`/.hg/patches && hg $@ )

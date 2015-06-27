@@ -8,6 +8,7 @@
 ^xdot.py$
 ^mvim$
 ^js$
+^libmozglue.dylib$
 ^firefox$
 ^cargo$
 ^rust$
