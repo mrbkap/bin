@@ -1,0 +1,4 @@
+#!/bin/bash
+
+PROPNUM=`xinput list | grep TouchPad | perl -n  -e'/id=(\d+)/ && print $1'`
+xinput set-prop $PROPNUM "Device Enabled" 0
