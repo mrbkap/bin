@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Finds and removes temporary backup files, core files, or patch reject files
+# from the current directory (but without descending into git or hg metadata
+# directories).
+
 find . \( -name .git -or -name .hg \) -prune -or \
        \( -name '.#*' -or \
           -name '#*#' -or \
