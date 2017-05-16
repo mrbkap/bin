@@ -1,6 +1,14 @@
+#!/bin/bash
+
+# Usage: cpp_uuid [<interface name>}]
+# Generates a copypasta of a UUID with an optional interface name built in for
+# use with an C++-defined XPCOM interface.
+
+IFACE=$(echo "$1" | sed -e 's/^NS_//')
+
 UUID=$(uuidgen)
 echo "// $UUID"
-echo "#define NS__IID \\"
+echo "#define NS_${IFACE}_IID \\"
 echo "{ 0x${UUID:0:8}, 0x${UUID:9:4}, 0x${UUID:14:4}, \\"
 echo -n "  { 0x${UUID:19:2}, 0x${UUID:21:2}, 0x${UUID:24:2}, "
 echo -n "0x${UUID:26:2}, 0x${UUID:28:2}, 0x${UUID:30:2}, "
