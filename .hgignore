@@ -1,3 +1,4 @@
+# Version control binaries that might be installed into ~/bin
 ^git
 ^mtn
 ^hg$
@@ -5,12 +6,19 @@
 ^hgk-1$
 ^hgmerge$
 ^bzr$
-^xdot.py$
-^mvim$
-^js$
-^libmozglue.dylib$
+
+# Firefox binary (or symlink) that might be in ~/bin
 ^firefox$
+
+# Local js shell binary
+^js$
+
+# Rust binaries that might be installed into ~/bin
 ^cargo$
 ^rust$
 ^rustc$
 ^rustdoc$
+
+# For OSX-only: shortcut to gvim and .dylib for the js shell (see above).
+^mvim$
+^libmozglue.dylib$
