@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Helper script to find a mach executable in either the current directory or a
+# mozilla sibling directory. Also forces Python 2 (thanks, Arch Linux!).
+
 MACH=''
 if [ -x ./mach ]; then
     MACH='./mach'
